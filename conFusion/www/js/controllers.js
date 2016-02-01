@@ -41,8 +41,9 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-  .controller('MenuController', ['$scope', 'menuFactory', function($scope, menuFactory) {
-            
+  .controller('MenuController', ['$scope', 'menuFactory', 'baseURL', function($scope, menuFactory, baseURL) {
+
+            $scope.baseURL = baseURL;
             $scope.tab = 1;
             $scope.filtText = '';
             $scope.showDetails = false;
@@ -85,8 +86,9 @@ angular.module('conFusion.controllers', [])
             };
         }])
 
-        .controller('ContactController', ['$scope', function($scope) {
+        .controller('ContactController', ['$scope','baseURL', function($scope,baseURL) {
 
+        	$scope.baseURL = baseURL;
             $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
             
             var channels = [{value:"tel", label:"Tel."}, {value:"Email",label:"Email"}];
@@ -102,7 +104,7 @@ angular.module('conFusion.controllers', [])
                 
                 console.log($scope.feedback);
                 
-                if ($scope.feedback.agree && ($scope.feedback.mychannel == "")) {
+                if ($scope.feedback.agree && ($scope.feedback.mychannel === "")) {
                     $scope.invalidChannelSelection = true;
                     console.log('incorrect');
                 }
@@ -117,8 +119,9 @@ angular.module('conFusion.controllers', [])
             };
         }])
 
-        .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
+        .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory','baseURL', function($scope, $stateParams, menuFactory, baseURL) {
             
+            $scope.baseURL= baseURL;
             $scope.dish = {};
             $scope.showDish = false;
             $scope.message="Loading ...";
@@ -137,8 +140,9 @@ angular.module('conFusion.controllers', [])
             
         }])
 
-        .controller('DishCommentController', ['$scope', 'menuFactory', function($scope,menuFactory) {
+        .controller('DishCommentController', ['$scope', 'menuFactory', 'baseURL' , function($scope, menuFactory, baseURL) {
             
+             $scope.baseURL= baseURL;
             $scope.mycomment = {rating:5, comment:"", author:"", date:""};
             
             $scope.submitComment = function () {
@@ -152,17 +156,27 @@ angular.module('conFusion.controllers', [])
                 $scope.commentForm.$setPristine();
                 
                 $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-            }
+            };
         }])
 
         // implement the IndexController and About Controller here
 
-       .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', 'baseURL', function($scope, menuFactory, corporateFactory, baseURL) {
+     .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', 'baseURL', function($scope, menuFactory, corporateFactory, baseURL) {
 
                         $scope.baseURL = baseURL;
-                        $scope.leader = corporateFactory.get({id:3});
                         $scope.showDish = false;
                         $scope.message="Loading ...";
+                        $scope.leader = corporateFactory.getLeaders().get({id:3})
+                        .$promise.then(
+                            function(response){
+                                $scope.leader = response;
+                                $scope.showLeader = true;
+                            },
+                            function(response) {
+                                $scope.message = "Error: "+response.status + " " + response.statusText;
+                            }
+                        );
+
                         $scope.dish = menuFactory.getDishes().get({id:0})
                         .$promise.then(
                             function(response){
@@ -174,4 +188,27 @@ angular.module('conFusion.controllers', [])
                             }
                         );
                         $scope.promotion = menuFactory.getPromotion().get({id:0});
-      }]);
+      }])
+
+       .controller('AboutController', ['$scope', 'corporateFactory', 'baseURL', 
+       	function($scope, corporateFactory, baseURL) {
+
+       	$scope.baseURL = baseURL;
+    	$scope.showLeaders=false;
+    	$scope.message="Loading";
+
+
+            $scope.leadership= corporateFactory.getLeaders().query()
+               .$promise.then(
+            		function(response){
+            			$scope.leadership=response;
+            			$scope.showLeaders=true;
+            		},
+            		function(response){
+            			$scope.message="Error: "+" "+response.status + " "+ response.statusText;
+            		}
+
+            	);
+   
+        }])
+;
