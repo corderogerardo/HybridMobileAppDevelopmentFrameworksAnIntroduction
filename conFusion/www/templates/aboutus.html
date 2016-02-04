@@ -18,14 +18,16 @@
 	  			Corporate Leadership
 	            			
 	  		</div>
-	  		<div ng-repeat="leader in leadership" class="item item-thumbnail-left item-text-wrap" >
-			  	 <img ng-src="{{baseURL+leader.image}}">
-			            <h2>{{leader.name}}</h2>
-			            <h2>{{leader.designation}}</h2>
+	  		<div class="list list-inset">
+		  		<div ng-repeat="leader in leadership" class="item item-avatar item-text-wrap" >
+				  	 <img ng-src="{{baseURL+leader.image}}">
+				            <h2>{{leader.name}}</h2>
+				            <h2>{{leader.designation}}</h2>
 
-			            <p>{{leader.description}}</p>
-	  		</div>
-	  	</div><!-- end of card -->
+				            <p>{{leader.description}}</p>
+		  		</div>
+	  		</div><!-- end list -->
+	  </div><!-- end of card -->
 
 
   </ion-content>
