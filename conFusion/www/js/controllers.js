@@ -39,7 +39,34 @@ angular.module('conFusion.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
-})
+  /*this create the reserve modal that we will use later*/
+  $ionicModal.fromTemplateUrl('templates/reserve.html',{
+  	scope:$scope
+  }).then(function(modal){
+  	$scope.reserveForm = modal;
+  });
+
+  /*this section triggered in the reserve modal to close it*/
+  $scope.closeReserve = function(){
+  	$scope.reserveForm.hide();
+  };
+
+  /*this function open the reserve modal*/
+  $scope.reserve = function(){
+  	$scope.reserveForm.show();
+  };
+
+  /*Perform the reserve action when the user submits the reserve form*/
+  $scope.doReserve = function(){
+  	console.log('Doing reservation', $scope.reservation);
+  	//Simulate a reservation delay. Remove this and replace with your reservation
+  	//code if using a server system
+  	$timeout(function(){
+  		$scope.closeReserve();
+  	},1000);	
+  };
+
+})/*end of appCtrl controller*/
 
   .controller('MenuController', ['$scope', 'menuFactory', 'baseURL', function($scope, menuFactory, baseURL) {
 
