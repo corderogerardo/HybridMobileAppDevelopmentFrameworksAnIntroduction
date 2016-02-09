@@ -15,10 +15,13 @@
     <ion-list>
 	<ion-item ng-repeat="dish in dishes | filter:{category: filtText}" href="#/app/menu/{{dish.id}}" class="item-thumbnail-left">
 		        <img ng-src="{{baseURL+dish.image}}">
-		        <h2>{{dish.name}}
-		         <span style="font-size:75%">{{dish.price | currency}}</span>
-		        <span class="badge badge-assertive">{{dish.label}}</span></h2>
-		        <p>{{dish.description}}</p>
+		        <h2>{{dish.name}}<!-- week1-->
+		         <span style="font-size:75%">{{dish.price | currency}}</span> <!-- week1 -->
+		        <span class="badge badge-assertive">{{dish.label}}</span></h2><!-- week1 -->
+		        <p>{{dish.description}}</p><!-- week1 -->
+		        <ion-option-button class="button-assertive icon ion-plus-circled"
+		        				ng-click="addFavorite({{dish.id}})"> <!-- week2 -->
+		        </ion-option-button>
       	</ion-item>
     </ion-list>
   </ion-content>

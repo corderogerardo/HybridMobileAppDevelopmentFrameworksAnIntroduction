@@ -24,10 +24,10 @@ angular.module('conFusion.services', ['ngResource'])
                 // implement a function named getPromotion
                 // that returns a selected promotion.
                 this.getPromotion = function() {
-                    return   $resource(baseURL+"promotions/:id");;
-                }
+                    return   $resource(baseURL+"promotions/:id");
+                };
     
-                        
+                        /*end menuFactory*/
         }])
 
         .factory('corporateFactory', ['$resource', 'baseURL', function($resource,baseURL) {
@@ -37,14 +37,39 @@ angular.module('conFusion.services', ['ngResource'])
     		 return $resource(baseURL+"leadership/:id",null,  {'update':{method:'PUT' }});
     		};
     	return corpfac;
-          
+          /*end coorporate factory*/
         }])
 
         .factory('feedbackFactory', ['$resource', 'baseURL', function($resource,baseURL) {
     
     
             return $resource(baseURL+"feedback/:id");
-    
+    	
+    	/*end feedbackFactory*/
         }])
+        .factory('favoriteFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+        	var favFac = {};
+        	var favorites = [];
 
-;
+        	favFac.addToFactory = function (index){
+        		for(var i = 0; i < favorites.length; i++){
+        			if(favorites[i].id == index){
+        				return;
+        			};
+        		};
+        		favorites.push({id:index});
+        	}; /*end method addToFactory*/
+        	favFac.deleteFromFavorites = function (index){
+        		for(var i = 0; i<favorites.length; i++){
+        			if (favorites[i].id = index){
+        				favorites.splice(i,1);
+        			};
+        		};
+        	};
+        	favFac.getFavorites = function(){
+        		return favorites;
+        	};
+        	/*end of the favoriteFactory service*/
+        	return favFac;
+        }])
+ ;
