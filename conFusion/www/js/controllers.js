@@ -19,6 +19,9 @@ angular.module('conFusion.controllers', [])
     $scope.modal = modal;
   });
 
+
+ 
+
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modal.hide();
@@ -56,8 +59,7 @@ angular.module('conFusion.controllers', [])
   $scope.reserve = function(){
   	$scope.reserveForm.show();
   };
-
-  /*Perform the reserve action when the user submits the reserve form*/
+   /*Perform the reserve action when the user submits the reserve form*/
   $scope.doReserve = function(){
   	console.log('Doing reservation', $scope.reservation);
   	//Simulate a reservation delay. Remove this and replace with your reservation
@@ -66,6 +68,8 @@ angular.module('conFusion.controllers', [])
   		$scope.closeReserve();
   	},1000);	
   };
+ 
+ 
 
 })/*end of appCtrl controller*/
 
@@ -154,14 +158,15 @@ angular.module('conFusion.controllers', [])
             };
         }])
 
-        .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory','baseURL', function($scope, $stateParams, menuFactory, baseURL) {
+        .controller('DishDetailController', ['$scope', '$stateParams','menuFactory','favoriteFactory','baseURL','$ionicPopover','$ionicModal', function($scope, $stateParams, menuFactory,favoriteFactory, baseURL, $ionicPopover, $ionicModal) {
             
             $scope.baseURL= baseURL;
             $scope.dish = {};
             $scope.showDish = false;
             $scope.message="Loading ...";
             
-            $scope.dish = menuFactory.getDishes().get({id:parseInt($stateParams.id,10)})
+          
+              $scope.dish = menuFactory.getDishes().get({id:parseInt($stateParams.id,10)})
             .$promise.then(
                             function(response){
                                 $scope.dish = response;
@@ -170,9 +175,61 @@ angular.module('conFusion.controllers', [])
                             function(response) {
                                 $scope.message = "Error: "+response.status + " " + response.statusText;
                             }
-            );
+            ); 
 
-            
+            $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+     	scope:$scope
+	   }).then(function(popover){
+		     $scope.popover = popover;
+	     });
+
+	 $scope.openPopover = function($event) {
+	    $scope.popover.show($event);
+	  };
+	 $scope.closePopover = function() {
+	    $scope.popover.hide();
+	  };
+
+	 $scope.addFavorite= function(){
+            		favoriteFactory.addToFactory($scope.dish.id);
+            		$scope.closePopover();
+            }; /*added in week 2*/           
+
+	   /*this create the comment modal*/
+$ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.commentForm = modal;
+  });
+  /*this section triggered in the reserve modal to close it*/
+  $scope.closeCommentForm = function(){
+  	$scope.commentForm.hide();
+  };
+  /*this function open the reserve modal*/
+  $scope.comment = function(){
+  	$scope.closePopover();
+  	$scope.commentForm.show();
+  };
+
+    $scope.mycomment = {rating:5, comment:"", author:"", date:""};
+
+   $scope.doComment = function(){
+   	
+  	
+                $scope.mycomment.date = new Date().toISOString();
+                console.log($scope.mycomment);
+          
+                $scope.dish.comments.push($scope.mycomment);
+        menuFactory.getDishes().update({id:$scope.dish.id},$scope.dish);
+                
+                $scope.commentForm.$setPristine();
+                
+                $scope.mycomment = {rating:5, comment:"", author:"", date:""};
+         
+	         $timeout(function() {
+	        $scope.closeCommentForm();
+	        }, 1000);
+  	 }; 
         }])
 
         .controller('DishCommentController', ['$scope', 'menuFactory', 'baseURL' , function($scope, menuFactory, baseURL) {
@@ -254,6 +311,8 @@ angular.module('conFusion.controllers', [])
      $ionicLoading.show({
         template: '<ion-spinner></ion-spinner> Loading...'
     });
+
+    
 
     $scope.favorites = favoriteFactory.getFavorites();
 

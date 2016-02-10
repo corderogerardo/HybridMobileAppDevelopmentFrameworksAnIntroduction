@@ -90,6 +90,16 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
         }
       }
     })
+ .state('app.comments', {
+	url: '/app',
+    	abstract: true,
+      views: {
+        'mainContent': {
+          templateUrl: 'templates/commentForm.html',
+            controller:'DishCommentController'
+        }
+      }
+    })
   ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
