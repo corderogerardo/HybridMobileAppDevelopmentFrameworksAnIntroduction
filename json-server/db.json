@@ -56,6 +56,12 @@
           "comment": "Testing Comment",
           "author": "Testing",
           "date": "2016-02-10T05:31:34.627Z"
+        },
+        {
+          "rating": "5",
+          "comment": "A pizza pa mala",
+          "author": "Gerardo Cordero",
+          "date": "2016-03-19T18:42:39.880Z"
         }
       ]
     },
