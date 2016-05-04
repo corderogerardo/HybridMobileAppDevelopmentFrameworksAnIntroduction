@@ -62,6 +62,18 @@
           "comment": "A pizza pa mala",
           "author": "Gerardo Cordero",
           "date": "2016-03-19T18:42:39.880Z"
+        },
+        {
+          "rating": "5",
+          "comment": "Prueba de Comentario",
+          "author": "Test Comentario",
+          "date": "2016-04-26T18:17:19.289Z"
+        },
+        {
+          "rating": "5",
+          "comment": "Prueba de Comentario",
+          "author": "Test Comentario",
+          "date": "2016-04-26T18:17:19.289Z"
         }
       ]
     },
